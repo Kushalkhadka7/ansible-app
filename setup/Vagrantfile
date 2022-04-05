@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+ENV['VAGRANT_NO_PARALLEL'] = 'yes'
+
+Vagrant.configure(2) do |config|
+
+  config.ssh.insert_key = false
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  # General VirtualBox VM configuration.
+  config.vm.provider :virtualbox do |v|
+    v.memory = 512
+    v.cpus = 2
+    v.linked_clone = true
+  end
+
+  config.vm.define 'ubuntu' do |ubuntu|
+    ubuntu.vm.box = "geerlingguy/ubuntu2004"
+    ubuntu.vm.hostname = "ubuntu.example.com"
+    ubuntu.vm.network "private_network", ip: "172.16.16.100"
+
+    ubuntu.vm.provider "virtualbox" do |v|
+      v.name = "ubuntu"
+    end
+  end
+
+  NodeCount = 2
+
+  (1..NodeCount).each do |i|
+    config.vm.define "centos#{i}" do |centos|
+      centos.vm.box = 'geerlingguy/centos7'
+      centos.vm.hostname = "centos-#{i}.example.com"
+      centos.vm.network "private_network", ip: "172.16.16.10#{i}"
+
+      centos.vm.provider "virtualbox" do |v|
+        v.name = "centos#{i}"
+      end
+    end
+  end
+end

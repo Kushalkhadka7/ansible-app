@@ -1,0 +1,20 @@
+---
+- hosts: multi
+  become: yes
+  tasks:
+    - name: Install ntp
+      package:
+        name: ntp
+        state: present
+
+    - name: Install apache
+      package:
+        name:
+          - httpd
+        state: present
+
+    - name: Restart
+      service:
+        name: httpd
+        state: started
+        enabled: true
