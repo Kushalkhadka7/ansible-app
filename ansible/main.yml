@@ -1,20 +1,49 @@
 ---
-- hosts: multi
-  become: yes
+- hosts: all
+  become: true
+
+  environment:
+    - foo:
+
+  pre_tasks:
+    - name: Load variables
+      include_vars: "{{ item }}"
+      with_first_found:
+        - "apache_{{ ansible_os_family }}.yml"
+        - "default.yml"
+
+  handlers:
+    - name: restart apache
+      service:
+        name: "{{ package_service }}"
+        state: restarted
+
+    - name: memcached running
+      service:
+        name: httpd
+        state: started
+        enabled: true
+
   tasks:
+    - name: Get env variable value
+      shell: "echo $foo"
+      register: foo
+      tags:
+        - env
+
+    - debug: msg={{ ansible_os_family }}
+
+    - name: Setup env variable to the remote user.
+      lineinfile:
+        dest: "~/{{ bash_profile_file }}"
+        regexp: "^ENV_VAR="
+        line: "ENV_VAR=foo"
+      become: false
+
     - name: Install ntp
       package:
         name: ntp
         state: present
 
-    - name: Install apache
-      package:
-        name:
-          - httpd
-        state: present
-
-    - name: Restart
-      service:
-        name: httpd
-        state: started
-        enabled: true
+  roles:
+    - role: apache

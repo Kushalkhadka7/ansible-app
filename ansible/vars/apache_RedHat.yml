@@ -1,0 +1,4 @@
+---
+package_name: httpd
+package_service: httpd
+bash_profile_file: ".bash_profile"

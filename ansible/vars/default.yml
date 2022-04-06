@@ -1,0 +1,4 @@
+---
+package_name: apache2
+package_service: apache2
+bash_profile_file: ".profile"

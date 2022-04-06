@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+
+  tasks:
+    - name: "Include abc.testrole"
+      include_role:
+        name: "abc.testrole"

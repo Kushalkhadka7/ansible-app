@@ -1,0 +1,6 @@
+---
+# tasks file for testrole
+- name: Install ntp
+  package:
+    name: ntp
+    state: present

@@ -1,0 +1,6 @@
+---
+- name: Install memcached
+  package:
+    name:
+      - memcached
+    state: present
