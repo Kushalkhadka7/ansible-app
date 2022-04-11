@@ -46,4 +46,5 @@
         state: present
 
   roles:
-    - role: apache
+    - role: memcached
+    - role: geerlingguy.java

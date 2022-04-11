@@ -14,3 +14,13 @@ init-role:
 
 test:
 	@molecule test
+
+init-scenario:
+	@molecule init scenario
+	
+converge:
+	@molecule converge
+
+destory:
+	@molecule destory
+	
